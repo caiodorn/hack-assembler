@@ -39,7 +39,7 @@ public class HackAssemblerApp {
                 .filter(line -> !line.trim().isEmpty() && !line.trim().startsWith("//"))
                 .collect(Collectors.toList());
 
-        nonEmptyLines.forEach(line -> asmCommands.add(line.replaceAll("\\s","")));
+        nonEmptyLines.forEach(line -> asmCommands.add(line.split("//")[0].replaceAll("\\s","")));
 
         return asmCommands;
     }

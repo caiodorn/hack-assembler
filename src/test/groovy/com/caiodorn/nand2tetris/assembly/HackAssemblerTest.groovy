@@ -12,8 +12,8 @@ class HackAssemblerTest extends Specification {
             new HackAssemblerApp().main("src/test/resources/input.asm")
 
         then:
-            byte[] actualConvertedFile = Files.readAllBytes(Paths.get("input.hack"))
-            byte[] expectedConvertedFile = Files.readAllBytes(Paths.get("src/test/resources/expectedOutput.hack"))
+            def actualConvertedFile = Files.readAllLines(Paths.get("input.hack"))
+            def expectedConvertedFile = Files.readAllLines(Paths.get("src/test/resources/expectedOutput.hack"))
             actualConvertedFile.equals(expectedConvertedFile)
     }
 

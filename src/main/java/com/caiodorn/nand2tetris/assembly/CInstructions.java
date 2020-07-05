@@ -1,16 +1,52 @@
 package com.caiodorn.nand2tetris.assembly;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public final class CInstructions {
 
     public static final Map<String, String> COMP;
     public static final Map<String, String> DEST;
     public static final Map<String, String> JUMP;
+    private static final Set<String> A_OP_CODE_OFF_INSTRUCTIONS;
+    private static final Set<String> A_OP_CODE_ON_INSTRUCTIONS;
+    private static final String A_OP_CODE_OFF = "0";
+    private static final String A_OP_CODE_ON = "1";
 
     static {
+        Set<String> aOff = new HashSet<>();
+        aOff.add("0");
+        aOff.add("1");
+        aOff.add("-1");
+        aOff.add("D");
+        aOff.add("A");
+        aOff.add("!D");
+        aOff.add("!A");
+        aOff.add("-D");
+        aOff.add("-A");
+        aOff.add("D+1");
+        aOff.add("A+1");
+        aOff.add("D-1");
+        aOff.add("A-1");
+        aOff.add("D+A");
+        aOff.add("D-A");
+        aOff.add("A-D");
+        aOff.add("D&A");
+        aOff.add("D|A");
+        A_OP_CODE_OFF_INSTRUCTIONS = Collections.unmodifiableSet(aOff);
+
+        Set<String> aOn = new HashSet<>();
+        aOn.add("M");
+        aOn.add("!M");
+        aOn.add("-M");
+        aOn.add("M+1");
+        aOn.add("M-1");
+        aOn.add("D+M");
+        aOn.add("D-M");
+        aOn.add("M-D");
+        aOn.add("D&M");
+        aOn.add("D|M");
+        A_OP_CODE_ON_INSTRUCTIONS = Collections.unmodifiableSet(aOn);
+
         Map<String, String> c = new HashMap<>();
         c.put("0",   "101010");
         c.put("1",   "111111");
@@ -43,7 +79,7 @@ public final class CInstructions {
         COMP = Collections.unmodifiableMap(c);
 
         Map<String, String> d = new HashMap<>();
-        d.put("null", "000");
+        d.put(null,   "000");
         d.put("M",    "001");
         d.put("D",    "010");
         d.put("MD",   "011");
@@ -54,7 +90,7 @@ public final class CInstructions {
         DEST = Collections.unmodifiableMap(d);
 
         Map<String, String> j = new HashMap<>();
-        j.put("null", "000");
+        j.put(null,   "000");
         j.put("JGT",  "001");
         j.put("JEQ",  "010");
         j.put("JGE",  "011");
@@ -66,5 +102,17 @@ public final class CInstructions {
     }
 
     private CInstructions() {}
+
+    public static String getAOpCode(String comp) {
+        String aOpCode = null;
+
+        if (A_OP_CODE_OFF_INSTRUCTIONS.contains(comp)) {
+            aOpCode = A_OP_CODE_OFF;
+        } else if (A_OP_CODE_ON_INSTRUCTIONS.contains(comp)) {
+            aOpCode = A_OP_CODE_ON;
+        }
+
+        return aOpCode;
+    }
 
 }

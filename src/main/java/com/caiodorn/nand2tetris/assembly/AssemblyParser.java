@@ -9,8 +9,11 @@ public class AssemblyParser {
     private static final int BASE_ADDRESS = 16;
     private static final Map<String, Integer> PREDEFINED_SYMBOLS;
     private static final String A_CMD_PREFIX = "@";
+    private static final String C_INST_BINARY_PREFIX = "111";
     private static final Predicate<String> IS_A_CMD = cmd -> cmd.startsWith(A_CMD_PREFIX);
     private static final Predicate<String> IS_L_CMD = cmd -> cmd.startsWith("(");
+    private static final String EMPTY = "";
+    private static final String LABEL_REGEXP = "[()]";
 
     private final Map<String, Integer> customSymbols = new HashMap<>();
 
@@ -50,33 +53,61 @@ public class AssemblyParser {
     }
 
     private void mapLabels(List<String> asmCommands) {
-        for (int i = 0; i < asmCommands.size(); i++) {
+        for (int i = 0, count = 0; i < asmCommands.size(); i++) {
             final String cmd = asmCommands.get(i);
 
             if (IS_L_CMD.apply(cmd)) {
-                final String key = cmd.replaceAll("[()]", "");
-                customSymbols.put(key, i + 1);
+                final String key = cmd.replaceAll(LABEL_REGEXP, EMPTY);
+                customSymbols.put(key, i - count++);
             }
         }
     }
 
     private void mapSymbols(List<String> asmCommands) {
-        for (int i = 0; i < asmCommands.size(); i++) {
+        for (int i = 0, count = 0; i < asmCommands.size(); i++) {
             final String cmd = asmCommands.get(i);
 
             if (IS_A_CMD.apply(cmd)) {
-                final String key = cmd.replaceAll("[@]", "");
+                final String key = cmd.replace(A_CMD_PREFIX, EMPTY);
 
-                if (!(PREDEFINED_SYMBOLS.containsKey(key) || customSymbols.containsKey(key))) {
-                    customSymbols.put(key, BASE_ADDRESS + customSymbols.size());
+                try {
+                    Integer.parseUnsignedInt(key);
+                } catch (NumberFormatException nfe) {
+                    if (!(PREDEFINED_SYMBOLS.containsKey(key) || customSymbols.containsKey(key))) {
+                        customSymbols.put(key, BASE_ADDRESS + count++);
+                    }
                 }
             }
         }
     }
 
     private String parseCInstruction(String cmd) {
-        // TODO
-        return null;
+        String[] parts = cmd.split(";");
+        String[] compDest = parts[0].split("=");
+        boolean isJump = parts.length > 1;
+        String jump;
+        String dest;
+        String comp;
+
+        if (isJump) {
+            jump = CInstructions.JUMP.get(parts[1]);
+
+            if (compDest.length > 1) {
+                dest = CInstructions.DEST.get(compDest[0]);
+                comp = CInstructions.COMP.get(compDest[1]);
+            } else {
+                dest = CInstructions.DEST.get(null);
+                comp = CInstructions.COMP.get(compDest[0]);
+            }
+        } else {
+            jump = CInstructions.JUMP.get(null);
+            dest = CInstructions.DEST.get(compDest[0]);
+            comp = CInstructions.COMP.get(compDest[1]);
+        }
+
+        String aOpCode = CInstructions.getAOpCode(compDest.length > 1 ? compDest[1] : compDest[0]);
+
+        return C_INST_BINARY_PREFIX + aOpCode + comp + dest + jump;
     }
 
     private List<String> convertToBinary(List<String> asmCommands) {
@@ -86,13 +117,21 @@ public class AssemblyParser {
             final String cmd = asmCommands.get(i);
 
             if (IS_A_CMD.apply(cmd)) {
-                final String key = cmd.replaceAll(A_CMD_PREFIX, "");
+                final String key = cmd.replaceAll(A_CMD_PREFIX, EMPTY);
+                Integer intValue;
 
-                if (PREDEFINED_SYMBOLS.get(key) != null) {
-                    binaryCode.add(Integer.toBinaryString(PREDEFINED_SYMBOLS.get(key)));
-                } else {
-                    binaryCode.add(Integer.toBinaryString(customSymbols.get(key)));
+                try {
+                    intValue = Integer.parseUnsignedInt(key);
+                } catch (NumberFormatException nfe) {
+                    if (PREDEFINED_SYMBOLS.get(key) != null) {
+                        intValue = PREDEFINED_SYMBOLS.get(key);
+                    } else {
+                        intValue = customSymbols.get(key);
+                    }
                 }
+
+                binaryCode.add(String.format("%16s", Integer.toBinaryString(intValue)).replace(' ', '0'));
+
             } else if (!IS_L_CMD.apply(cmd)) {
                 binaryCode.add(parseCInstruction(cmd));
             }

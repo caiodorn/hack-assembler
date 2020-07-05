@@ -8,7 +8,7 @@ class AssemblyParserTest extends Specification {
         def asmCode = new ArrayList<>()
         asmCode.add(aInst)
         def aInstNumOnly = Integer.parseInt(aInst.replace("@", ""))
-        def expectedBinaryCode = Integer.toBinaryString(aInstNumOnly)
+        def expectedBinaryCode = String.format("%16s", Integer.toBinaryString(aInstNumOnly)).replace(' ', '0')
 
         expect:
             def actualBinaryCode = new AssemblyParser().parse(asmCode).get(0)
