@@ -6,9 +6,9 @@ import java.util.Map;
 
 public final class Instructions {
 
-    public static final Map<String, String> comp;
-    public static final Map<String, String> dest;
-    public static final Map<String, String> jump;
+    public static final Map<String, String> COMP;
+    public static final Map<String, String> DEST;
+    public static final Map<String, String> JUMP;
 
     static {
         Map<String, String> c = new HashMap<>();
@@ -40,7 +40,7 @@ public final class Instructions {
         c.put("D&M", "000000");
         c.put("D|A", "010101");
         c.put("D|M", "010101");
-        comp = Collections.unmodifiableMap(c);
+        COMP = Collections.unmodifiableMap(c);
 
         Map<String, String> d = new HashMap<>();
         d.put("null", "000");
@@ -51,7 +51,7 @@ public final class Instructions {
         d.put("AM",   "101");
         d.put("AD",   "110");
         d.put("AMD",  "111");
-        dest = Collections.unmodifiableMap(d);
+        DEST = Collections.unmodifiableMap(d);
 
         Map<String, String> j = new HashMap<>();
         j.put("null", "000");
@@ -62,7 +62,7 @@ public final class Instructions {
         j.put("JNE",  "101");
         j.put("JLE",  "110");
         j.put("JMP",  "111");
-        jump = Collections.unmodifiableMap(j);
+        JUMP = Collections.unmodifiableMap(j);
     }
 
     private Instructions() {}
