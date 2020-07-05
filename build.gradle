@@ -45,5 +45,5 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClassName = 'com.caiodorn.nand2tetris.assembly.HackAssembler'
+    mainClassName = 'com.caiodorn.nand2tetris.assembly.HackAssemblerApp'
 }

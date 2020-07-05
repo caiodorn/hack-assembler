@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class Instructions {
+public final class CInstructions {
 
     public static final Map<String, String> COMP;
     public static final Map<String, String> DEST;
@@ -65,6 +65,6 @@ public final class Instructions {
         JUMP = Collections.unmodifiableMap(j);
     }
 
-    private Instructions() {}
+    private CInstructions() {}
 
 }
