@@ -32,12 +32,11 @@ public class HackAssemblerApp {
         }
     }
 
-    // TODO remove also comments
     private static List<String> removeBlanks(List<String> rawLines) {
         List<String> asmCommands = new ArrayList<>();
 
         List<String> nonEmptyLines = rawLines.stream()
-                .filter(line -> !line.trim().isEmpty())
+                .filter(line -> !line.trim().isEmpty() && !line.trim().startsWith("//"))
                 .collect(Collectors.toList());
 
         nonEmptyLines.forEach(line -> asmCommands.add(line.replaceAll("\\s","")));
