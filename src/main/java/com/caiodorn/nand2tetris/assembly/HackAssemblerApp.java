@@ -24,7 +24,7 @@ public class HackAssemblerApp {
 
         try {
             List<String> rawLines = Files.readAllLines(Paths.get(fullyQualifiedFileName));
-            List<String> binaryCode = new AssemblyParser().parse(removeBlanks(rawLines));
+            List<String> binaryCode = new AssemblyParser().parse(prepareFileForParsing(rawLines));
             Files.write(Paths.get(outputFileName), binaryCode);
         } catch (IOException e) {
             log.error("An error occurred!", e);
@@ -32,7 +32,7 @@ public class HackAssemblerApp {
         }
     }
 
-    private static List<String> removeBlanks(List<String> rawLines) {
+    private static List<String> prepareFileForParsing(List<String> rawLines) {
         List<String> asmCommands = new ArrayList<>();
 
         List<String> nonEmptyLines = rawLines.stream()

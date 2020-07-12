@@ -12,9 +12,9 @@ class HackAssemblerTest extends Specification {
             new HackAssemblerApp().main("src/test/resources/input.asm")
 
         then:
-            def actualConvertedFile = Files.readAllLines(Paths.get("input.hack"))
-            def expectedConvertedFile = Files.readAllLines(Paths.get("src/test/resources/expectedOutput.hack"))
-            actualConvertedFile.equals(expectedConvertedFile)
+            List<String> actualConvertedFile = Files.readAllLines(Paths.get("input.hack"))
+            List<String> expectedConvertedFile = Files.readAllLines(Paths.get("src/test/resources/expectedOutput.hack"))
+            actualConvertedFile == expectedConvertedFile
     }
 
     def "should throw exception if no file provided"() {

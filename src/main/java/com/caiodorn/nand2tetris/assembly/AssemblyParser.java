@@ -84,12 +84,12 @@ public class AssemblyParser {
     private String parseCInstruction(String cmd) {
         String[] parts = cmd.split(";");
         String[] compDest = parts[0].split("=");
-        boolean isJump = parts.length > 1;
+        boolean hasJump = parts.length > 1;
         String jump;
         String dest;
         String comp;
 
-        if (isJump) {
+        if (hasJump) {
             jump = CInstructions.JUMP.get(parts[1]);
 
             if (compDest.length > 1) {
@@ -113,9 +113,7 @@ public class AssemblyParser {
     private List<String> convertToBinary(List<String> asmCommands) {
         final List<String> binaryCode = new ArrayList<>();
 
-        for (int i = 0; i < asmCommands.size(); i++) {
-            final String cmd = asmCommands.get(i);
-
+        for (final String cmd : asmCommands) {
             if (IS_A_CMD.apply(cmd)) {
                 final String key = cmd.replaceAll(A_CMD_PREFIX, EMPTY);
                 Integer intValue;

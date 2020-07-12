@@ -5,7 +5,7 @@ import spock.lang.Specification
 class AssemblyParserTest extends Specification {
 
     def "should parse basic A-instructions"(String aInst) {
-        def asmCode = new ArrayList<>()
+        List<String> asmCode = new ArrayList<>()
         asmCode.add(aInst)
         def aInstNumOnly = Integer.parseInt(aInst.replace("@", ""))
         def expectedBinaryCode = String.format("%16s", Integer.toBinaryString(aInstNumOnly)).replace(' ', '0')
@@ -20,13 +20,13 @@ class AssemblyParserTest extends Specification {
 
     def "should parse A-instructions containing custom symbols"() {
         given:
-            def asmCode = new ArrayList<>()
+            List<String> asmCode = new ArrayList<>()
             asmCode.add("@i")
             asmCode.add("@t")
             asmCode.add("@END")
             asmCode.add("@z")
 
-            def memAddr = new HashMap<>()
+            Map<String, Integer> memAddr = new HashMap<>()
             memAddr.put(asmCode.get(0), 16)
             memAddr.put(asmCode.get(1), 17)
             memAddr.put(asmCode.get(2), 18)
@@ -36,7 +36,7 @@ class AssemblyParserTest extends Specification {
             def actualBinaryCode = new AssemblyParser().parse(asmCode)
 
         then:
-            actualBinaryCode.size().equals(asmCode.size())
+            actualBinaryCode.size() == asmCode.size()
 
             for (def cmd : actualBinaryCode) {
                 actualBinaryCode.contains(Integer.toBinaryString(Integer.parseInt(cmd)))
@@ -45,7 +45,7 @@ class AssemblyParserTest extends Specification {
 
     def "should map L-instructions to next line of code"() {
         given:
-            def asmCode = new ArrayList<>()
+            List<String> asmCode = new ArrayList<>()
             asmCode.add("(LOOP)")
             asmCode.add("@i")
             asmCode.add("@LOOP")
@@ -61,7 +61,7 @@ class AssemblyParserTest extends Specification {
             def actualBinaryCode = new AssemblyParser().parse(asmCode)
 
         then:
-            actualBinaryCode.size().equals(numberOfLinesWithoutLabelDeclarations)
+            actualBinaryCode.size() == numberOfLinesWithoutLabelDeclarations
 
             for (def cmd : actualBinaryCode) {
                 actualBinaryCode.contains(Integer.toBinaryString(Integer.parseInt(cmd)))
