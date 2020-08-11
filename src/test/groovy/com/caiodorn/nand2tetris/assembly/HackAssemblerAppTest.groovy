@@ -5,7 +5,7 @@ import spock.lang.Specification
 
 import java.nio.file.Paths
 
-class HackAssemblerTest extends Specification {
+class HackAssemblerAppTest extends Specification {
 
     def "should generate file containing expected binary code"() {
         when:
