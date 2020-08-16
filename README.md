@@ -1,4 +1,4 @@
-Implementation of [project 6](https://b1391bd6-da3d-477d-8c01-38cdf774495a.filesusr.com/ugd/56440f_65a2d8eef0ed4e0ea2471030206269b5.pdf) 
+Implementation of [project 6](https://www.nand2tetris.org/project06) 
 of [nand2tetris course](https://www.nand2tetris.org/course).
 
 Usage: 
