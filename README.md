@@ -3,7 +3,7 @@ of [nand2tetris course](https://www.nand2tetris.org/course).
 
 Usage: 
 
-Executable files are located under /build/distributions/hack-assembler/bin
+Executable files are located under /build/distributions/hack-assembler/bin (will be created after Gradle build)
 
 * Mac/Linux
     * $ ./hack-assembler sourcefile.asm
