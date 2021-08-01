@@ -1,8 +1,11 @@
 package com.caiodorn.nand2tetris.assembly;
 
-import com.google.common.base.Predicate;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class AssemblyParser {
 
@@ -56,7 +59,7 @@ public class AssemblyParser {
         for (int i = 0, count = 0; i < asmCommands.size(); i++) {
             final String cmd = asmCommands.get(i);
 
-            if (IS_L_CMD.apply(cmd)) {
+            if (IS_L_CMD.test(cmd)) {
                 final String key = cmd.replaceAll(LABEL_REGEXP, EMPTY);
                 customSymbols.put(key, i - count++);
             }
@@ -64,10 +67,9 @@ public class AssemblyParser {
     }
 
     private void mapSymbols(List<String> asmCommands) {
-        for (int i = 0, count = 0; i < asmCommands.size(); i++) {
-            final String cmd = asmCommands.get(i);
-
-            if (IS_A_CMD.apply(cmd)) {
+        int count = 0;
+        for (final String cmd : asmCommands) {
+            if (IS_A_CMD.test(cmd)) {
                 final String key = cmd.replace(A_CMD_PREFIX, EMPTY);
 
                 try {
@@ -114,7 +116,7 @@ public class AssemblyParser {
         final List<String> binaryCode = new ArrayList<>();
 
         for (final String cmd : asmCommands) {
-            if (IS_A_CMD.apply(cmd)) {
+            if (IS_A_CMD.test(cmd)) {
                 final String key = cmd.replaceAll(A_CMD_PREFIX, EMPTY);
                 Integer intValue;
 
@@ -130,7 +132,7 @@ public class AssemblyParser {
 
                 binaryCode.add(String.format("%16s", Integer.toBinaryString(intValue)).replace(' ', '0'));
 
-            } else if (!IS_L_CMD.apply(cmd)) {
+            } else if (!IS_L_CMD.test(cmd)) {
                 binaryCode.add(parseCInstruction(cmd));
             }
         }

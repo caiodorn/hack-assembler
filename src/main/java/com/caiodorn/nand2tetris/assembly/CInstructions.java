@@ -1,6 +1,10 @@
 package com.caiodorn.nand2tetris.assembly;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public final class CInstructions {
 
